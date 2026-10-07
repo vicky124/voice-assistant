@@ -1,0 +1,98 @@
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --ink: #1c1b19;
+  --muted: #6f6c66;
+  --line: #e3e0d8;
+  --accent: #c2410c;
+  --accent-soft: #fde7da;
+  --user: #1c1b19;
+  --user-ink: #ffffff;
+  --danger: #b91c1c;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #141412;
+    --surface: #1f1e1b;
+    --ink: #edebe6;
+    --muted: #9c988f;
+    --line: #2f2d29;
+    --accent: #fb923c;
+    --accent-soft: #3a2416;
+    --user: #edebe6;
+    --user-ink: #141412;
+    --danger: #f87171;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 16px 32px;
+  display: grid;
+  gap: 20px;
+  min-height: 100dvh;
+  grid-template-rows: auto auto 1fr auto auto;
+}
+
+header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+h1 { font-size: 18px; margin: 0; letter-spacing: -0.01em; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; }
+.badges span { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+
+.stage { display: grid; justify-items: center; gap: 8px; padding: 12px 0; }
+.orb {
+  width: 128px; height: 128px; border-radius: 50%; border: none; cursor: pointer; position: relative;
+  background: radial-gradient(circle at 35% 30%, #fff6 0, transparent 45%), var(--accent);
+  box-shadow: 0 10px 30px -10px var(--accent);
+  transition: transform 0.2s ease;
+}
+.orb:focus-visible { outline: 3px solid var(--ink); outline-offset: 4px; }
+.orb.disconnected { filter: grayscale(0.6); opacity: 0.85; }
+.orb .ring { position: absolute; inset: -10px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; }
+.orb.listening .ring { animation: pulse 2s ease-out infinite; }
+.orb.thinking { animation: breathe 1s ease-in-out infinite; }
+.orb.speaking { transform: scale(1.06); }
+.orb.speaking .ring { animation: pulse 0.8s ease-out infinite; }
+
+@keyframes pulse { from { opacity: 0.7; transform: scale(0.95); } to { opacity: 0; transform: scale(1.25); } }
+@keyframes breathe { 50% { transform: scale(0.94); } }
+@media (prefers-reduced-motion: reduce) { .orb, .orb .ring { animation: none !important; } }
+
+.status { margin: 4px 0 0; font-weight: 600; }
+.link { background: none; border: none; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; }
+.error { color: var(--danger); margin: 0; text-align: center; font-size: 14px; }
+
+.log {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px;
+  overflow-y: auto; display: flex; flex-direction: column; gap: 10px; min-height: 220px; max-height: 45dvh;
+}
+.empty { color: var(--muted); margin: auto; text-align: center; }
+.bubble { max-width: 85%; padding: 10px 14px; border-radius: 16px; line-height: 1.45; white-space: pre-wrap; }
+.bubble.user { align-self: flex-end; background: var(--user); color: var(--user-ink); border-bottom-right-radius: 4px; }
+.bubble.assistant { align-self: flex-start; background: var(--accent-soft); border-bottom-left-radius: 4px; }
+.bubble.pending { opacity: 0.75; }
+.tag { margin-left: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+
+.composer { display: flex; gap: 8px; }
+.composer input {
+  flex: 1; min-width: 0; font: inherit; padding: 10px 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.composer button {
+  font: inherit; font-weight: 600; padding: 10px 18px; border-radius: 999px; border: none;
+  background: var(--ink); color: var(--bg); cursor: pointer;
+}
+.composer button:disabled { opacity: 0.4; cursor: default; }
+
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; }
+.metrics div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
+.metrics span { font-size: 12px; color: var(--muted); }
+.metrics strong { font-variant-numeric: tabular-nums; font-size: 18px; }
